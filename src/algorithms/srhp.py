@@ -1,6 +1,3 @@
-# no_avl.py
-import time
-
 class No_SRPH:
     def __init__(self, dado):
         self.dado = dado
