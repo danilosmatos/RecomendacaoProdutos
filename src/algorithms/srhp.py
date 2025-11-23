@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 class ArvoreAVL:
     def __init__(self):
         self.raiz = None
         self.produtos_por_categoria = {}
 
     class NoAVL:
-    # Cada nó vai ser uma categoria no app
-=======
-class Arvore_SRPH:
-    def __init__(self):
-        self.raiz = None
-
-    class No_SRPH:
->>>>>>> 99a9e26388c5afe7c9dab82d032bd25cafdde7c0
         def __init__(self, dado):
             self.dado = dado
             self.altura = 1
@@ -50,7 +41,6 @@ class Arvore_SRPH:
         return y
 
     def inserir_categoria(self, dado):
-<<<<<<< HEAD
         if dado not in self.produtos_por_categoria:
             self.produtos_por_categoria[dado] = []
         self.raiz = self._inserir_recursivo(self.raiz, dado)
@@ -58,14 +48,6 @@ class Arvore_SRPH:
     def _inserir_recursivo(self, raiz_atual, dado):
         if not raiz_atual:
             return self.NoAVL(dado)
-=======
-        self.raiz = self._inserir_recursivo(self.raiz, dado)
-        print(f"'{dado}' inserido.")
-
-    def _inserir_recursivo(self, raiz_atual, dado):
-        if not raiz_atual:
-            return self.No_SRPH(dado)
->>>>>>> 99a9e26388c5afe7c9dab82d032bd25cafdde7c0
 
         if dado < raiz_atual.dado:
             raiz_atual.esquerda = self._inserir_recursivo(raiz_atual.esquerda, dado)
@@ -106,7 +88,6 @@ class Arvore_SRPH:
             return self._buscar_recursivo(no_atual.esquerda, dado)
         else:
             return self._buscar_recursivo(no_atual.direita, dado)
-<<<<<<< HEAD
         
     def _get_sucessor(self, no):
         no_atual = no.direita
@@ -157,8 +138,6 @@ class Arvore_SRPH:
             return self._rotacao_esquerda(raiz_atual)
 
         return raiz_atual
-=======
->>>>>>> 99a9e26388c5afe7c9dab82d032bd25cafdde7c0
 
     def cadastrar_produto_em_categoria(self, nome_categoria, nome_produto):
         no_categoria = self.buscar_categoria(nome_categoria)
@@ -185,7 +164,6 @@ class Arvore_SRPH:
             return "Nenhum produto encontrado nesta hierarquia (simulada)."
 
     def _get_produtos_recursivo(self, no_atual):
-<<<<<<< HEAD
         categorias = []
         if no_atual:
             categorias.append(no_atual.dado)
@@ -200,15 +178,6 @@ class Arvore_SRPH:
             no_raiz = self.raiz
             
         return self._get_produtos_recursivo(no_raiz)
-=======
-        produtos = []
-        if no_atual:
-            produtos.append(no_atual.dado)
-            produtos.extend(self._get_produtos_recursivo(no_atual.esquerda))
-            produtos.extend(self._get_produtos_recursivo(no_atual.direita))
-
-        return produtos
->>>>>>> 99a9e26388c5afe7c9dab82d032bd25cafdde7c0
 
     def travessia_em_ordem(self, no_atual):
         resultado = []
