@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import Frame, Button, Label, Entry, ttk, messagebox
+from productController import ProductController 
 
-class Application():
-    def __init__(self):
+class Application:
+    def __init__(self,ctrl):
         janela = tk.Tk()
         self.janela = janela
         self.livros = []
         self.livro_selecionado = None
+        self.ctrl = ctrl
 
         self.tela()
         self.frames_tela()
@@ -15,6 +17,8 @@ class Application():
         self.busca()
         self.tabela()
 
+        self.listar_livros() 
+        self.preencher_categorias()
         janela.mainloop()
 
     def tela(self):
@@ -38,8 +42,8 @@ class Application():
     def widgets(self):
         self.label_codigo = Label(self.frame_1, text = "Código do Livro", bg ="#D3D3D3", font = ("Dosis", 10, "bold"))
         self.label_codigo.place(relx=0.02, rely=0.05, relwidth=0.12)
-        self.codigo_entry = Entry(self.frame_1, font = ("Arial", 10))
-        self.codigo_entry.place(relx=0.02, rely=0.20, relwidth=0.12, relheight=0.15)
+        self.id_entry = Entry(self.frame_1, font = ("Arial", 10))
+        self.id_entry.place(relx=0.02, rely=0.20, relwidth=0.12, relheight=0.15)
 
         self.label_nome = Label(self.frame_1, text = "Nome do Livro", bg = "#D3D3D3", font = ("Dosis", 10, "bold"))
         self.label_nome.place(relx=0.15, rely=0.05, relwidth=0.25)
@@ -57,10 +61,10 @@ class Application():
         self.autor_entry = Entry(self.frame_1, font= ("Arial", 10))
         self.autor_entry.place(relx=0.60, rely=0.20, relwidth=0.18, relheight=0.15)
 
-        self.label_valor = Label(self.frame_1, bg = "#D3D3D3", text= "Valor (R$)", font= ("Dosi", 10, "bold"))
-        self.label_valor.place(relx=0.02, rely=0.45, relwidth=0.12)
-        self.valor_entry = Entry(self.frame_1, font = ("Arial", 10))
-        self.valor_entry.place(relx=0.02, rely=0.60, relwidth=0.12, relheight=0.15)
+        self.label_preco = Label(self.frame_1, bg = "#D3D3D3", text= "Valor (R$)", font= ("Dosi", 10, "bold"))
+        self.label_preco.place(relx=0.02, rely=0.45, relwidth=0.12)
+        self.preco_entry = Entry(self.frame_1, font = ("Arial", 10))
+        self.preco_entry.place(relx=0.02, rely=0.60, relwidth=0.12, relheight=0.15)
 
         self.label_estoque = Label (self.frame_1, text= "Estoque", bg="#D3D3D3", font= ("Dosi", 10, "bold"))
         self.label_estoque.place(relx=0.15, rely=0.45, relwidth=0.10)
@@ -77,6 +81,11 @@ class Application():
         self.label_ano.place(relx=0.45, rely=0.45, relwidth=0.08)
         self.ano_entry = Entry(self.frame_1, font = ("Arial", 10))
         self.ano_entry.place(relx=0.45, rely=0.60, relwidth=0.08, relheight=0.15)
+        
+        self.label_rec = Label(self.frame_1, bg = "#D3D3D3", text = "Cat. Raiz (Rec.)", font= ("Dosi", 10, "bold"))
+        self.label_rec.place(relx=0.54, rely=0.45, relwidth=0.14)
+        self.rec_combo = ttk.Combobox(self.frame_1, font= ("Arial", 10), state="readonly")
+        self.rec_combo.place(relx=0.54, rely=0.60, relwidth=0.14, relheight=0.15)
 
     def buttons(self):
         self.bt_add = Button(self.frame_1, text= "➕ADICIONAR", command= self.add_livro, bg= "#05C70B", fg = "white", font= ("Dosi", 10, "bold"), cursor= "hand2")
@@ -93,6 +102,9 @@ class Application():
 
         self.bt_limpar = Button(self.frame_2, text= "LIMPAR CAMPOS", command= self.limpar_campos, bg= "#9E9E9E", fg= "white", font= ("Dosi", 10, "bold"), cursor= "hand2")
         self.bt_limpar.place(relx=0.28, rely=0.87, relwidth=0.13, relheight=0.1)
+        
+        self.bt_recomendar = Button(self.frame_2, text= "⭐ RECOMENDAR", command= self.recomendar_livros, bg= "#E91E63", fg= "white", font= ("Dosi", 10, "bold"), cursor= "hand2")
+        self.bt_recomendar.place(relx=0.42, rely=0.87, relwidth=0.15, relheight=0.1)
 
     def busca(self):
         self.label_buscar = Label(self.frame_busca, bg = "#D3D3D3", text= "Pesquisar 🔍", font= ("Dosi", 11, "bold"))
@@ -147,20 +159,24 @@ class Application():
         self.tree.tag_configure("evenrow", background="#F0F0F0")
         self.tree.pack(fill="both", expand=True)
 
+    def preencher_categorias(self):
+        categorias = self.ctrl.arvore_categorias.travessia_em_ordem(self.ctrl.arvore_categorias.raiz)
+        self.categoria_combo.config(values=categorias)
+        self.rec_combo.config(values=categorias)
+    
     def add_livro(self):
         dados = self.obter_dados_formulario()
         if not dados:
             return
+        sucesso, mensagem = self.ctrl.adicionar(dados)
         
-        for livro in self.livros:
-            if livro['codigo'] == dados['codigo']:
-                messagebox.showerror("Erro", "Código já cadastrado!")
-                return
-        
-        self.livros.append(dados)
-        self.listar_livros()
-        self.limpar_campos()
-        messagebox.showinfo("Sucesso", "Livro adicionado com sucesso!")
+        if sucesso:
+            self.listar_livros()
+            self.limpar_campos()
+            self.preencher_categorias() 
+            messagebox.showinfo("Sucesso", mensagem)
+        else:
+            messagebox.showerror("Erro", mensagem)
 
     def att_livro(self):
         if not self.livro_selecionado:
@@ -171,10 +187,15 @@ class Application():
         if not dados:
             return
         
-        for livro in self.livros:
-            if livro['codigo'] == self.livro_selecionado:
-                livro.update(dados)
-                break
+        sucesso, mensagem = self.ctrl.atualizar(self.livro_selecionado, dados)
+        
+        if sucesso:
+            self.listar_livros()
+            self.limpar_campos()
+            self.preencher_categorias() 
+            messagebox.showinfo("Sucesso", mensagem)
+        else:
+            messagebox.showerror("Erro", mensagem)
         
         self.listar_livros()
         self.limpar_campos()
@@ -187,11 +208,32 @@ class Application():
         
         resposta = messagebox.askyesno("Confirmar", "Deseja realmente remover este livro?")
         if resposta:
-            self.livros = [l for l in self.livros if l['codigo'] != self.livro_selecionado]
-            self.listar_livros()
-            self.limpar_campos()
-            messagebox.showinfo("Sucesso", "Livro removido com sucesso!")
+            sucesso, mensagem = self.ctrl.remover(self.livro_selecionado)
+            if sucesso:
+                self.listar_livros()
+                self.limpar_campos()
+                self.preencher_categorias() 
+                messagebox.showinfo("Sucesso", mensagem)
+            else:
+                messagebox.showerror("Erro", mensagem)
 
+    def preencher_tabela(self, produtos): # foi usado varias vezes no cod do antonio, melhor transformar em uma função
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        
+        for idx, livro in enumerate(produtos):
+            tag = "evenrow" if idx % 2 == 0 else "oddrow"
+            self.tree.insert("", "end", values=(
+                livro['id'], 
+                livro['nome'], 
+                livro['categoria'], 
+                livro['autor'],
+                f"R$ {livro['preco']:.2f}", 
+                livro['estoque'], 
+                livro['idioma'], 
+                livro['ano']
+            ), tags=(tag,))
+    
     def buscar_livro(self):
         termo = self.busca_entry.get().strip().lower()
         filtro = self.filtrar_combo.get()
@@ -203,28 +245,8 @@ class Application():
         for item in self.tree.get_children():
             self.tree.delete(item)
         
-        resultados = []
-        for livro in self.livros:
-            if filtro == "Todos":
-                if any(termo in str(v).lower() for v in livro.values()):
-                    resultados.append(livro)
-            elif filtro == "Código" and termo in str(livro['codigo']).lower():
-                resultados.append(livro)
-            elif filtro == "Nome" and termo in livro['nome'].lower():
-                resultados.append(livro)
-            elif filtro == "Autor" and termo in livro['autor'].lower():
-                resultados.append(livro)
-            elif filtro == "Gênero" and termo in livro['categoria'].lower():
-                resultados.append(livro)
-            elif filtro == "Ano" and termo in str(livro['ano']):
-                resultados.append(livro)
-        
-        for idx, livro in enumerate(resultados):
-            tag = "evenrow" if idx % 2 == 0 else "oddrow"
-            self.tree.insert("", "end", values=(
-                livro['codigo'], livro['nome'], livro['categoria'], livro['autor'],
-                f"R$ {livro['valor']:.2f}", livro['estoque'], livro['idioma'], livro['ano']
-            ), tags=(tag,))
+        resultados = self.ctrl.buscar_por_termo(termo, filtro)
+        self.preencher_tabela(resultados)
 
     def limpar_busca(self):
         self.busca_entry.delete(0, tk.END)
@@ -232,82 +254,76 @@ class Application():
         self.listar_livros()
 
     def listar_livros(self):
-        for item in self.tree.get_children():
-            self.tree.delete(item)
-        
-        for idx, livro in enumerate(self.livros):
-            tag = "evenrow" if idx % 2 == 0 else "oddrow"
-            self.tree.insert("", "end", values=(
-                livro['codigo'], 
-                livro['nome'], 
-                livro['categoria'], 
-                livro['autor'],
-                f"R$ {livro['valor']:.2f}", 
-                livro['estoque'], 
-                livro['idioma'], 
-                livro['ano']
-            ), tags=(tag,))
+        produtos = self.ctrl.listar()
+        self.preencher_tabela(produtos)
 
     def selecionar_livro(self, event):
         selected = self.tree.selection()
         if selected:
             item = self.tree.item(selected[0])
-            valores = item['values']
+            codigo_selecionado = item['values'][0] 
+            produto = self.ctrl.produtos_map.get(codigo_selecionado)
             
-            for livro in self.livros:
-                if livro['codigo'] == valores[0]:
-                    self.codigo_entry.delete(0, tk.END)
-                    self.codigo_entry.insert(0, livro['codigo'])
-                    
-                    self.nome_entry.delete(0, tk.END)
-                    self.nome_entry.insert(0, livro['nome'])
-                    
-                    self.categoria_combo.set(livro['categoria'])
-                    
-                    self.autor_entry.delete(0, tk.END)
-                    self.autor_entry.insert(0, livro['autor'])
-                    
-                    self.valor_entry.delete(0, tk.END)
-                    self.valor_entry.insert(0, str(livro['valor']))
-                    
-                    self.estoque_entry.delete(0, tk.END)
-                    self.estoque_entry.insert(0, str(livro['estoque']))
-                    
-                    self.idioma_combo.set(livro['idioma'])
-                    
-                    self.ano_entry.delete(0, tk.END)
-                    self.ano_entry.insert(0, str(livro['ano']))
-                    
-                    self.livro_selecionado = livro['codigo']
-                    break
+            if produto:
+                livro = produto.to_dict()
+                
+                self.id_entry.delete(0, tk.END)
+                self.id_entry.insert(0, livro['id'])
+                
+                self.nome_entry.delete(0, tk.END)
+                self.nome_entry.insert(0, livro['nome'])
+                
+                self.categoria_combo.set(livro['categoria'])
+                
+                self.autor_entry.delete(0, tk.END)
+                self.autor_entry.insert(0, livro['autor'])
+                
+                self.preco_entry.delete(0, tk.END)
+                self.preco_entry.insert(0, str(livro['preco']))
+                
+                self.estoque_entry.delete(0, tk.END)
+                self.estoque_entry.insert(0, str(livro['estoque']))
+                
+                self.idioma_combo.set(livro['idioma'])
+                
+                self.ano_entry.delete(0, tk.END)
+                self.ano_entry.insert(0, str(livro['ano']))
+                
+                self.livro_selecionado = livro['id']
+                
+                self.id_entry.config(state='disabled')
+        else:
+            self.limpar_campos()
 
     def limpar_campos(self):
-        self.codigo_entry.delete(0, tk.END)
+        self.id_entry.delete(0, tk.END)
         self.nome_entry.delete(0, tk.END)
         self.autor_entry.delete(0, tk.END)
         self.ano_entry.delete(0, tk.END)
-        self.valor_entry.delete(0, tk.END)
+        self.preco_entry.delete(0, tk.END)
         self.estoque_entry.delete(0, tk.END)
         self.categoria_combo.set("")
         self.idioma_combo.set("")
+        self.rec_combo.set("") 
         self.livro_selecionado = None
+        self.id_entry.config(state='normal')
 
     def obter_dados_formulario(self):
-        codigo = self.codigo_entry.get().strip()
+        codigo = self.id_entry.get().strip()
         nome = self.nome_entry.get().strip()
         autor = self.autor_entry.get().strip()
         ano = self.ano_entry.get().strip()
-        valor = self.valor_entry.get().strip()
+        preco = self.preco_entry.get().strip()
         estoque = self.estoque_entry.get().strip()
         categoria = self.categoria_combo.get().strip()
         idioma = self.idioma_combo.get().strip()
         
-        if not all([codigo, nome, valor, estoque]):
+        if not all([codigo, nome, preco, estoque]):
             messagebox.showwarning("Atenção", "Preencha pelo menos: Código, Nome, Valor e Estoque!")
             return None
         
         try:
-            valor_float = float(valor)
+            preco_float = float(preco)
             estoque_int = int(estoque)
             ano_int = int(ano) if ano else 0
         except ValueError:
@@ -319,11 +335,27 @@ class Application():
             'nome': nome,
             'autor': autor if autor else "-",
             'ano': ano_int,
-            'valor': valor_float,
+            'preco': preco_float,
             'estoque': estoque_int,
             'categoria': categoria if categoria else "-",
             'idioma': idioma if idioma else "-"
         }
 
-if __name__ == "__main__":
-    Application()
+    def recomendar_livros(self):
+        categoria_raiz = self.rec_combo.get().strip()
+        if not categoria_raiz:
+            messagebox.showwarning("Atenção", "Selecione uma Categoria para recomendação!")
+            return
+        produtos_recomendados, categorias_alvo = self.ctrl.recomendar_produtos_por_categoria(categoria_raiz)
+        
+        if not produtos_recomendados:
+            messagebox.showinfo("Recomendação", f"Nenhum produto encontrado para a hierarquia '{categoria_raiz}'.")
+            self.listar_livros()
+            return
+            
+        self.preencher_tabela(produtos_recomendados)
+        messagebox.showinfo("Recomendação", 
+                            f"Mostrando {len(produtos_recomendados)} produtos das categorias:\n{', '.join(categorias_alvo)}")
+
+def iniciar_aplicacao(ctrl):
+    Application(ctrl)
