@@ -1,6 +1,7 @@
-from productController import ProductController
-from front_end import iniciar_aplicacao
-import time
+from algorithms.productController import ProductController
+from algorithms.front_end import iniciar_aplicacao
+#from productController import ProductController
+#from front_end import iniciar_aplicacao
 
 def configurar_dados_iniciais(controller):
     print("--- Configurando Dados Iniciais ---")

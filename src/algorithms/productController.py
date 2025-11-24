@@ -1,5 +1,5 @@
-from products import Produto
-from srhp import ArvoreAVL
+from algorithms.products import Produto
+from algorithms.srhp import ArvoreAVL
 
 # atualizando os componentes para o que o antonio tinha adicionado no front, alterando a lógica para ser usada com srph e a arvoreavl, 
 # incluindo o dicio para o mapeamento dos produtos, e instanciar a arvore para

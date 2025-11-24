@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import Frame, Button, Label, Entry, ttk, messagebox
-from productController import ProductController 
+from algorithms.productController import ProductController 
 
 class Application:
     def __init__(self,ctrl):
