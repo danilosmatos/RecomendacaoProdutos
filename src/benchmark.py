@@ -1,8 +1,8 @@
 import time
-from productController import ProductController
+from algorithms.productController import ProductController
 
 def medir_performance_avl(controller, num_itens=5000):
-    print(f"\n---Executando Teste de Performance da Inserção AVL ({num_itens} Categorias)---")
+    print(f"\nTeste de Performance da Inserção AVL ({num_itens} Categorias)---")
     
     arvore_teste = controller.arvore_categorias
     dados = [f"Categoria_{i:05d}" for i in range(num_itens)]
@@ -13,9 +13,8 @@ def medir_performance_avl(controller, num_itens=5000):
     fim = time.time()
 
     tempo = fim - inicio
-    print(f"Tempo total de inserção AVL para {num_itens} itens: {tempo:.4f} segundos.")
+    print(f"\nTempo total de inserção AVL para {num_itens} itens: {tempo:.4f} segundos.")
     print("Complexidade: O(log n)")
-    print("-" * 60)
     
     return tempo
 
