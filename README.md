@@ -34,7 +34,7 @@ Professores:
 [Icaro Santos Ferreira](https://www.instagram.com/flamengo/?hl=en) | [Marcos Vinícius Silva Bento](https://github.com/marcmec)
 
 Alunos:  
-| [Antônio Gabriel](https://github.com/Anton-Gabriel-code) | [Danilo Soares de Matos](https://github.com/danilosmatos) | [Eudes de Oliveira Rocha](https://github.com/eudesolv) |  
+| [Antônio Gabriel](https://github.com/Anton-Gabriel-code) | [Danilo Soares Matos](https://github.com/danilosmatos) | [Eudes de Oliveira Rocha](https://github.com/eudesolv) |  
 
-| [Vinicius Augusto](https://github.com/Vinicius1213) | [Natalie Cavalcante ](https://github.com/nataliecavalcante) |
+| [Vinicius Augusto](https://github.com/Vinicius1213) | [Natalie Cavalcante](https://github.com/nataliecavalcante) | [Eduarda Rafaella Silva Melo](https://github.com/EduardaRafah)|
 
