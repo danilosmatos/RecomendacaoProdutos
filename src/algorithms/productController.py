@@ -68,7 +68,7 @@ class ProductController:
             if filtro == "Todos":
                 if any(termo in str(v).lower() for v in dados.values()):
                     encontrado = True
-            elif filtro == "Código" and termo == str(dados['codigo']).lower():
+            elif filtro == "Código" and termo in str(dados['id']).lower():
                 encontrado = True
             elif filtro == "Nome" and termo in dados['nome'].lower():
                 encontrado = True

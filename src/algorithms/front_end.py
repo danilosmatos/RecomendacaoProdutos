@@ -309,7 +309,7 @@ class Application:
         self.id_entry.config(state='normal')
 
     def obter_dados_formulario(self):
-        codigo = self.id_entry.get().strip()
+        id = self.id_entry.get().strip()
         nome = self.nome_entry.get().strip()
         autor = self.autor_entry.get().strip()
         ano = self.ano_entry.get().strip()
@@ -318,7 +318,7 @@ class Application:
         categoria = self.categoria_combo.get().strip()
         idioma = self.idioma_combo.get().strip()
         
-        if not all([codigo, nome, preco, estoque]):
+        if not all([id, nome, preco, estoque]):
             messagebox.showwarning("Atenção", "Preencha pelo menos: Código, Nome, Valor e Estoque!")
             return None
         
@@ -331,7 +331,7 @@ class Application:
             return None
         
         return {
-            'codigo': codigo,
+            'codigo': id,
             'nome': nome,
             'autor': autor if autor else "-",
             'ano': ano_int,
