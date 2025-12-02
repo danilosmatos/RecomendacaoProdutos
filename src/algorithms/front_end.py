@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import Frame, Button, Label, Entry, ttk, messagebox
 from algorithms.productController import ProductController 
 
-class Application:
+class ProductView:
     def __init__(self,ctrl):
         janela = tk.Tk()
         self.janela = janela
@@ -356,6 +356,3 @@ class Application:
         self.preencher_tabela(produtos_recomendados)
         messagebox.showinfo("Recomendação", 
                             f"Mostrando {len(produtos_recomendados)} produtos das categorias:\n{', '.join(categorias_alvo)}")
-
-def iniciar_aplicacao(ctrl):
-    Application(ctrl)

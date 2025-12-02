@@ -1,5 +1,5 @@
 from algorithms.productController import ProductController
-from algorithms.front_end import iniciar_aplicacao
+from algorithms.front_end import ProductView
 #from productController import ProductController
 #from front_end import iniciar_aplicacao
 
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     configurar_dados_iniciais(app_controller)
     
     print("\nIniciando a Aplicação")
-    iniciar_aplicacao(app_controller)
+    ProductView(app_controller)
