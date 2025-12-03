@@ -26,7 +26,8 @@ Baixar os arquivos e executar o main.py, nenhuma importação externa requerida.
 [Canvas Estrutura de Dados](https://afya.instructure.com/courses/130541/assignments/1118811) |
 [Canvas Laboratório de Programação](https://afya.instructure.com/courses/131513/assignments/1119527) |
 [PDF](https://github.com/danilosmatos/RecomendacaoProdutos/blob/main/src/misc/Projeto_Sistema_Recomendacao_Produtos_AVL.pdf) |
-[Diagrama UML](https://github.com/danilosmatos/RecomendacaoProdutos/blob/main/src/misc/Diagrama_UML)
+[Diagrama UML](https://github.com/danilosmatos/RecomendacaoProdutos/blob/main/src/misc/Diagrama_UML) |
+[Relatório](https://github.com/danilosmatos/RecomendacaoProdutos/blob/main/src/misc/Relat%C3%B3rio.pdf)
 
 ### Partipantes
 
